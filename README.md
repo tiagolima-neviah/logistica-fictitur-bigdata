@@ -50,7 +50,7 @@ Bronze ──► Silver ──► Gold (parquet; storage via fsspec: file:// ↔
 | Modelo relacional + DDL (staging) | concluído |
 | Staging Postgres no Docker | concluído |
 | Régua de validação dos dados sintéticos | concluído (28 checks) |
-| Gerador de dados sintéticos | em construção |
+| Gerador de dados sintéticos (2020-2026, ~22M linhas) | concluído e aprovado 28/28 |
 | Bronze / Silver / Gold | a iniciar |
 | Star schema + carga no destino | a iniciar |
 | Dashboards | a iniciar |
@@ -66,14 +66,16 @@ Bronze ──► Silver ──► Gold (parquet; storage via fsspec: file:// ↔
 ## Como rodar (estado atual)
 
 ```bash
-git clone git@github.com:tiagolima-neviah/logistica-fictitur-bigdata.git
+git clone https://github.com/tiagolima-neviah/logistica-fictitur-bigdata.git
 cd logistica-fictitur-bigdata
 cp .env.example .env        # edite STAGING_PASSWORD
-cd staging
-docker compose --env-file ../.env up -d
+cd staging && docker compose --env-file ../.env up -d && cd ..
+uv sync
+uv run gerador-staging      # popula 2020-2026 (~15 min, determinístico)
+uv run regua-staging        # valida: esperado 28 aprovados, 0 reprovados
 ```
 
-O Postgres sobe na porta `5433` (configurável no `.env`) com o banco `db_fictitur` e as 50 tabelas criadas pelo DDL de `staging/ddl/`. Conecte com seu cliente SQL usando as credenciais do `.env`. A carga dos dados sintéticos será a próxima etapa publicada.
+O Postgres sobe na porta `5433` (configurável no `.env`) com o banco `db_fictitur`; o gerador popula ~22 milhões de linhas cobrindo 2020 a 2026 e a régua dá o veredito. O manual completo, com verificações de saúde e solução de problemas, está no [Guia de Reprodução](docs/05_guia_reproducao.md).
 
 ## Estrutura de diretórios
 
@@ -98,7 +100,8 @@ logistica-fictitur-bigdata/
 - [02 · Entendimento dos Dados](docs/02_entendimento_dados.md): os 5 schemas e o papel de cada grupo de tabelas, em linguagem de negócio.
 - [03 · Modelo de Dados do Staging](docs/03_modelo_dados_staging.md): a referência técnica, com o diagrama e o objetivo de cada uma das 50 tabelas.
 - [04 · Régua de Validação](docs/04_regua_validacao.md): o contrato de aceite dos dados sintéticos e como rodá-lo.
-- Rotinas de manutenção e healthchecks: publicadas junto com o pipeline.
+- [05 · Guia de Reprodução](docs/05_guia_reproducao.md): o manual completo do clone ao staging validado, com healthchecks e troubleshooting.
+- Rotinas de manutenção adicionais: publicadas junto com o pipeline.
 
 ---
 
