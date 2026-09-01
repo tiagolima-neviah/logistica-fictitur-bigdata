@@ -49,7 +49,7 @@ Bronze ──► Silver ──► Gold (parquet; storage via fsspec: file:// ↔
 |---|---|
 | Modelo relacional + DDL (staging) | concluído |
 | Staging Postgres no Docker | concluído |
-| Régua de validação dos dados sintéticos | em construção |
+| Régua de validação dos dados sintéticos | concluído (28 checks) |
 | Gerador de dados sintéticos | em construção |
 | Bronze / Silver / Gold | a iniciar |
 | Star schema + carga no destino | a iniciar |
@@ -82,7 +82,11 @@ logistica-fictitur-bigdata/
 ├── README.md            # este hub
 ├── LICENSE              # MIT (software fornecido AS IS, sem garantias)
 ├── .env.example         # configuração 12-factor (copie para .env; o .env não é versionado)
+├── pyproject.toml       # pacote Python + esteira de qualidade (ruff, mypy, pytest)
 ├── docs/                # documentação do projeto (negócio, dados, manuais)
+├── src/logistica_fictitur/
+│   └── validacao/       # régua de validação: bandas versionadas + verificador
+├── tests/               # testes da esteira de qualidade
 └── staging/
     ├── docker-compose.yml
     └── ddl/             # DDL dos 5 schemas do banco de staging (00..05)
@@ -93,6 +97,7 @@ logistica-fictitur-bigdata/
 - [01 · Entendimento do Negócio](docs/01_entendimento_negocio.md): quem é a Fictitur, como opera, as dores e o objetivo do projeto.
 - [02 · Entendimento dos Dados](docs/02_entendimento_dados.md): os 5 schemas e o papel de cada grupo de tabelas, em linguagem de negócio.
 - [03 · Modelo de Dados do Staging](docs/03_modelo_dados_staging.md): a referência técnica, com o diagrama e o objetivo de cada uma das 50 tabelas.
+- [04 · Régua de Validação](docs/04_regua_validacao.md): o contrato de aceite dos dados sintéticos e como rodá-lo.
 - Rotinas de manutenção e healthchecks: publicadas junto com o pipeline.
 
 ---
