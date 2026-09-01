@@ -19,6 +19,7 @@ dev = [
 
 [project.scripts]
 regua-staging = "logistica_fictitur.validacao.regua:main"
+gerador-staging = "logistica_fictitur.gerador.principal:main"
 
 [build-system]
 requires = ["hatchling"]
