@@ -274,12 +274,12 @@ def executar(dsn: str) -> list[Resultado]:
                     ), agg AS (
                         SELECT sum(valor_cobrado) AS receita FROM faturamento.fatura_armazenagem
                     ), custo AS (
+                        -- toda foto persistida é fechamento (mensal ou o parcial corrente)
                         SELECT coalesce(sum(s.m3_ocupado), 0)
                                * coalesce((SELECT valor FROM financeiro.parametro_financeiro
                                            WHERE chave = 'custo_m3_galpao'
-                                           ORDER BY vigencia_inicio DESC LIMIT 1), 6.5) AS cv
+                                           ORDER BY vigencia_inicio DESC LIMIT 1), 25.0) AS cv
                         FROM fwm.estoque_snapshot s
-                        WHERE s.data = date_trunc('month', s.data)  -- fechamentos mensais
                     )
                     SELECT CASE WHEN agg.receita > 0 THEN
                         (agg.receita - agg.receita * taxa.v - custo.cv) / agg.receita

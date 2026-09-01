@@ -1,0 +1,64 @@
+cidade,uf,peso
+São Paulo,SP,90
+Campinas,SP,30
+Guarulhos,SP,22
+Santo André,SP,18
+Osasco,SP,14
+Ribeirão Preto,SP,16
+Sorocaba,SP,12
+Santos,SP,12
+São José dos Campos,SP,12
+Bauru,SP,8
+Lins,SP,3
+Presidente Prudente,SP,4
+São José do Rio Preto,SP,7
+Jundiaí,SP,9
+Rio de Janeiro,RJ,55
+Niterói,RJ,10
+Duque de Caxias,RJ,8
+Campos dos Goytacazes,RJ,5
+Belo Horizonte,MG,40
+Uberlândia,MG,10
+Contagem,MG,8
+Juiz de Fora,MG,7
+Varginha,MG,4
+Montes Claros,MG,4
+Lavras,MG,3
+Vitória,ES,10
+Vila Velha,ES,5
+Curitiba,PR,28
+Londrina,PR,9
+Maringá,PR,7
+Cascavel,PR,5
+Joinville,SC,12
+Florianópolis,SC,10
+Blumenau,SC,7
+Itajaí,SC,5
+Porto Alegre,RS,22
+Caxias do Sul,RS,8
+Pelotas,RS,4
+Salvador,BA,18
+Feira de Santana,BA,6
+Recife,PE,16
+Jaboatão dos Guararapes,PE,5
+Fortaleza,CE,14
+Juazeiro do Norte,CE,3
+Natal,RN,7
+João Pessoa,PB,6
+Maceió,AL,5
+Aracaju,SE,4
+São Luís,MA,6
+Teresina,PI,4
+Brasília,DF,20
+Goiânia,GO,12
+Anápolis,GO,4
+Cuiabá,MT,7
+Campo Grande,MS,6
+Manaus,AM,8
+Belém,PA,7
+Ananindeua,PA,3
+Porto Velho,RO,3
+Rio Branco,AC,2
+Boa Vista,RR,2
+Macapá,AP,2
+Palmas,TO,3

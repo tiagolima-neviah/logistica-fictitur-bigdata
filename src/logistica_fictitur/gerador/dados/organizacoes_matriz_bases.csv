@@ -1,0 +1,38 @@
+sigla,razao_social,nome_fantasia,cnpj,tipo_parceria,porte,segmento,fl_entrega_agendada,dt_inicio_contrato,dt_cancelamento,ativo,cidade_sede,uf_sede,nivel_infra
+TFB,Trans Fictício BR Logística Integrada LTDA,Trans Fictício BR,92482096000190,MATRIZ,,LOGISTICA,,2016-01-04,,True,Joinville,SC,ALTA
+BSP,São Paulo Log LTDA,São Paulo Log,89028599000185,BASE,,LOGISTICA,,2019-06-03,,True,São Paulo,SP,ALTA
+BCA,Campinas Cargas LTDA,Campinas Cargas,83453364000154,BASE,,LOGISTICA,,2017-02-23,,True,Campinas,SP,ALTA
+BSO,Sorocaba Express Logística LTDA,Sorocaba Express Logística,17663667000177,BASE,,LOGISTICA,,2019-01-25,,True,Sorocaba,SP,MEDIA
+BRP,Ribeirão Transportes LTDA,Ribeirão Transportes,51124345000198,BASE,,LOGISTICA,,2019-02-06,,True,Ribeirão Preto,SP,ALTA
+BSJ,São José do Rio Preto Log LTDA,São José do Rio Preto Log,40591756000177,BASE,,LOGISTICA,,2016-06-11,,True,São José do Rio Preto,SP,MEDIA
+BBA,Bauru Cargas LTDA,Bauru Cargas,76539986000134,BASE,,LOGISTICA,,2016-10-26,,True,Bauru,SP,MEDIA
+BLI,Lins Express Logística LTDA,Lins Express Logística,94463686000109,BASE,,LOGISTICA,,2017-10-24,,True,Lins,SP,MEDIA
+BPP,Presidente Transportes LTDA,Presidente Transportes,46461207000164,BASE,,LOGISTICA,,2016-04-13,,True,Presidente Prudente,SP,BAIXA
+BBH,Belo Log LTDA,Belo Log,81172997000169,BASE,,LOGISTICA,,2016-05-15,,True,Belo Horizonte,MG,ALTA
+BUD,Uberlândia Cargas LTDA,Uberlândia Cargas,94167753000130,BASE,,LOGISTICA,,2018-05-14,,True,Uberlândia,MG,ALTA
+BJF,Juiz Express Logística LTDA,Juiz Express Logística,37694185000191,BASE,,LOGISTICA,,2016-02-17,,True,Juiz de Fora,MG,MEDIA
+BVA,Varginha Transportes LTDA,Varginha Transportes,01754512000106,BASE,,LOGISTICA,,2016-06-13,,True,Varginha,MG,MEDIA
+BMC,Montes Log LTDA,Montes Log,50512030000155,BASE,,LOGISTICA,,2018-09-22,,True,Montes Claros,MG,BAIXA
+BRJ,Rio Cargas LTDA,Rio Cargas,91725643000158,BASE,,LOGISTICA,,2016-12-06,,True,Rio de Janeiro,RJ,ALTA
+BCG,Campos Express Logística LTDA,Campos Express Logística,46131985000195,BASE,,LOGISTICA,,2016-01-11,,True,Campos dos Goytacazes,RJ,MEDIA
+BVT,Vitória Transportes LTDA,Vitória Transportes,60595316000103,BASE,,LOGISTICA,,2018-04-14,,True,Vitória,ES,MEDIA
+BCT,Curitiba Log LTDA,Curitiba Log,81478382000165,BASE,,LOGISTICA,,2018-03-16,,True,Curitiba,PR,ALTA
+BLD,Londrina Cargas LTDA,Londrina Cargas,49793655000153,BASE,,LOGISTICA,,2017-02-11,,True,Londrina,PR,MEDIA
+BCV,Cascavel Express Logística LTDA,Cascavel Express Logística,22283733000113,BASE,,LOGISTICA,,2017-10-03,,True,Cascavel,PR,MEDIA
+BFL,Florianópolis Transportes LTDA,Florianópolis Transportes,15986361000126,BASE,,LOGISTICA,,2016-09-27,,True,Florianópolis,SC,ALTA
+BPA,Porto Log LTDA,Porto Log,15272949000118,BASE,,LOGISTICA,,2019-07-09,,True,Porto Alegre,RS,ALTA
+BCX,Caxias Cargas LTDA,Caxias Cargas,55600940000103,BASE,,LOGISTICA,,2016-03-04,,True,Caxias do Sul,RS,MEDIA
+BSA,Salvador Express Logística LTDA,Salvador Express Logística,70030712000139,BASE,,LOGISTICA,,2016-03-27,,True,Salvador,BA,ALTA
+BFS,Feira Transportes LTDA,Feira Transportes,59630806000106,BASE,,LOGISTICA,,2019-06-07,,True,Feira de Santana,BA,MEDIA
+BRE,Recife Log LTDA,Recife Log,94978326000131,BASE,,LOGISTICA,,2018-04-24,,True,Recife,PE,ALTA
+BFO,Fortaleza Cargas LTDA,Fortaleza Cargas,38699012000129,BASE,,LOGISTICA,,2019-11-13,,True,Fortaleza,CE,MEDIA
+BJN,Juazeiro Express Logística LTDA,Juazeiro Express Logística,19678151000121,BASE,,LOGISTICA,,2019-01-14,,True,Juazeiro do Norte,CE,BAIXA
+BNT,Natal Transportes LTDA,Natal Transportes,17853658000149,BASE,,LOGISTICA,,2019-03-17,,True,Natal,RN,MEDIA
+BSL,São Luís Log LTDA,São Luís Log,49055351000199,BASE,,LOGISTICA,,2018-11-03,,True,São Luís,MA,MEDIA
+BTE,Teresina Cargas LTDA,Teresina Cargas,05171566000108,BASE,,LOGISTICA,,2017-08-21,,True,Teresina,PI,BAIXA
+BBR,Brasília Express Logística LTDA,Brasília Express Logística,38275402000171,BASE,,LOGISTICA,,2016-07-01,,True,Brasília,DF,ALTA
+BGO,Goiânia Transportes LTDA,Goiânia Transportes,62964706000120,BASE,,LOGISTICA,,2019-01-01,,True,Goiânia,GO,MEDIA
+BCB,Cuiabá Log LTDA,Cuiabá Log,83621412000176,BASE,,LOGISTICA,,2016-06-23,,True,Cuiabá,MT,MEDIA
+BMA,Manaus Cargas LTDA,Manaus Cargas,66076360000185,BASE,,LOGISTICA,,2016-12-25,,True,Manaus,AM,MEDIA
+BBL,Belém Express Logística LTDA,Belém Express Logística,11204628000125,BASE,,LOGISTICA,,2019-08-07,,True,Belém,PA,MEDIA
+BPV,Porto Transportes LTDA,Porto Transportes,14636824000167,BASE,,LOGISTICA,,2016-01-28,,True,Porto Velho,RO,BAIXA

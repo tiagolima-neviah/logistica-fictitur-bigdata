@@ -3,7 +3,7 @@
 # Régua de Validação — o contrato de aceite dos dados sintéticos
 
 <!-- nav:start -->
-[Home](../README.md) | [← Modelo de Dados](03_modelo_dados_staging.md)
+[Home](../README.md) | [← Modelo de Dados](03_modelo_dados_staging.md) | [Guia de Reprodução →](05_guia_reproducao.md)
 <!-- nav:end -->
 
 > Antes de qualquer camada analítica consumir o staging, os dados sintéticos passam por uma régua de validação versionada: um conjunto de verificações com bandas de aceite (mínimo e máximo) para volumes, indicadores, fases, taxas de sujeira e margens. A regra é inegociável: **banda estourada não se contorna, regenera-se a base**. Este documento explica o mecanismo; as bandas vivem em código, no repositório, e todo ajuste é versionado.
