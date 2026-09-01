@@ -96,11 +96,16 @@ class EstoqueArmazenagem:
         with self.conn.cursor() as cur:
             self._lotes(cur)
             for ano in range(2020, 2027):
+                print(f"  {ano} ", end="", flush=True)
                 for mes in range(1, 13):
                     if (ano, mes) > (2026, 9):
                         break
                     self._gerar_mes(cur, ano, mes)
+                    print(".", end="", flush=True)
                 self.conn.commit()
+                print(" ok", flush=True)
+            print("  consolidando saídas de estoque e posição corrente"
+                  " (a parte demorada)...", flush=True)
             self._saldo_e_saidas(cur)
             self._inventarios(cur)
             self.conn.commit()

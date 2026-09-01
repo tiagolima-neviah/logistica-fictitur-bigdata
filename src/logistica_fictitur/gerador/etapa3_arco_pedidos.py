@@ -155,11 +155,15 @@ class ArcoPedidos:
         self._carregar_mundo()
         with self.conn.cursor() as cur:
             for ano in range(2020, 2027):
+                inicio_ano = self.ss
+                print(f"  {ano} ", end="", flush=True)
                 for mes in range(1, 13):
                     if (ano, mes) > (2026, 9):
                         break
                     self._gerar_mes(cur, ano, mes)
+                    print(".", end="", flush=True)
                 self.conn.commit()
+                print(f" {self.ss - inicio_ano:>7} pedidos", flush=True)
         return self._contagens()
 
     def _sortear_modal(self) -> str:

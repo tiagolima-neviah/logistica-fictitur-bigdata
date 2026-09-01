@@ -3,7 +3,7 @@
 # Modelo de Dados do Staging — referência técnica
 
 <!-- nav:start -->
-[Home](../README.md) | [← Entendimento dos Dados](02_entendimento_dados.md)
+[Home](../README.md) | [← Entendimento dos Dados](02_entendimento_dados.md) | [Régua de Validação →](04_regua_validacao.md)
 <!-- nav:end -->
 
 > Referência técnica do banco `db_fictitur`: o diagrama do modelo e o objetivo de cada uma das 50 tabelas, schema a schema. A fonte da verdade estrutural é o DDL comentado em [`staging/ddl/`](../staging/ddl/); este documento é o mapa de leitura. Para o conceito de negócio por trás de cada domínio, leia antes o [Entendimento dos Dados](02_entendimento_dados.md).

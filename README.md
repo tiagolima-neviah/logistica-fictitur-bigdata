@@ -3,7 +3,7 @@
 # Fictitur Logística · Pipeline de BI ponta a ponta
 
 <!-- nav:start -->
-[Entendimento do Negócio](docs/01_entendimento_negocio.md) | [Entendimento dos Dados](docs/02_entendimento_dados.md) | [Modelo de Dados](docs/03_modelo_dados_staging.md)
+[Entendimento do Negócio](docs/01_entendimento_negocio.md) | [Entendimento dos Dados](docs/02_entendimento_dados.md) | [Modelo de Dados](docs/03_modelo_dados_staging.md) | [Régua de Validação](docs/04_regua_validacao.md) | [Guia de Reprodução](docs/05_guia_reproducao.md)
 <!-- nav:end -->
 
 > Pipeline completo e moderno de Business Intelligence construído sobre a **Fictitur Logística**, uma operadora logística **fictícia** com dados **100% sintéticos**: do banco relacional de origem ao staging, do staging às camadas bronze, silver e gold em parquet, da gold ao modelo multidimensional (star schema) carregado em banco relacional, pronto para dashboards web e Power BI. O repositório existe para ajudar analistas em início de carreira a percorrer um projeto de engenharia de dados e BI do jeito que ele acontece no mundo real, com custo baixo e total portabilidade.
