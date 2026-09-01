@@ -12,6 +12,7 @@ valor unitário — o furo de cobertura fiscal que a régua exige e a silver ach
 from __future__ import annotations
 
 import random
+from typing import Any
 
 import psycopg
 
@@ -96,7 +97,7 @@ class CatalogoComercial:
                 "SELECT o.id, o.sigla, o.segmento, o.porte FROM cadastro.organizacao o"
                 " WHERE o.tipo_parceria = 'CLIENTE' ORDER BY o.id"
             )
-            self.clientes = [
+            self.clientes: list[dict[str, Any]] = [
                 {"id": int(i), "sigla": str(s), "segmento": str(seg or "DEFAULT"),
                  "porte": str(p)}
                 for i, s, seg, p in cur.fetchall()
@@ -107,7 +108,7 @@ class CatalogoComercial:
                 "SELECT m.id, m.nome, m.uf, r.nome FROM cadastro.municipio m"
                 " JOIN cadastro.regiao r ON r.id = m.regiao_id"
             )
-            self.municipios = [
+            self.municipios: list[dict[str, Any]] = [
                 {"id": int(i), "nome": str(n), "uf": str(u), "regiao": str(rg)}
                 for i, n, u, rg in cur.fetchall()
             ]

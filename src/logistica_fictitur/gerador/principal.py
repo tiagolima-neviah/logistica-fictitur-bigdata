@@ -11,9 +11,10 @@ import psycopg
 from logistica_fictitur.config import dsn_staging
 from logistica_fictitur.gerador.etapa1_cadastro import MundoCadastral
 from logistica_fictitur.gerador.etapa2_itens_tarifas import CatalogoComercial
+from logistica_fictitur.gerador.etapa3_arco_pedidos import ArcoPedidos
 
 
-def _rodar(nome: str, etapa: MundoCadastral | CatalogoComercial) -> None:
+def _rodar(nome: str, etapa: MundoCadastral | CatalogoComercial | ArcoPedidos) -> None:
     if etapa.ja_populado():
         print(f"{nome}: já populada, pulando.")
         return
@@ -26,9 +27,10 @@ def main() -> None:
     with psycopg.connect(dsn_staging()) as conn:
         _rodar("Etapa 1/4 — mundo cadastral", MundoCadastral(conn))
         _rodar("Etapa 2/4 — catálogo comercial e réguas de prazo", CatalogoComercial(conn))
+        _rodar("Etapa 3/4 — arco operacional de pedidos 2020-2026", ArcoPedidos(conn))
     print("\nPara regenerar do zero: cd staging && docker compose --env-file ../.env"
           " down -v && docker compose --env-file ../.env up -d")
-    print("Próximas etapas (arco operacional 2020-2026, sujeira) em desenvolvimento.")
+    print("Etapa 4 (recebimento, estoque e armazenagem) em desenvolvimento.")
 
 
 if __name__ == "__main__":
