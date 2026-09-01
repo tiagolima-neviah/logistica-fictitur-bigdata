@@ -21,9 +21,10 @@
 
 ## 2. Passo a passo
 
-**1. Clone e entre no projeto:**
+**1. Clone e entre no projeto, SEMPRE no filesystem do Linux:** no WSL, clonar em `/mnt/c/...` (o disco do Windows) funciona, mas degrada muito a performance; o próprio uv avisa (`Failed to hardlink files; falling back to full copy`), a instalação fica ~25× mais lenta e as camadas em parquet das próximas fases sofrerão ainda mais. O `cd ~` abaixo não é decorativo:
 
 ```bash
+cd ~
 git clone https://github.com/tiagolima-neviah/logistica-fictitur-bigdata.git
 cd logistica-fictitur-bigdata
 ```
@@ -100,7 +101,8 @@ uv run gerador-staging
 | `permission denied` no Docker | seu usuário precisa estar no grupo `docker` (`sudo usermod -aG docker $USER` e reabra o terminal) |
 | gerador diz "já populado" | comportamento correto; para recomeçar, use a seção 4 |
 | régua reprova algum check | a base não está íntegra (geração interrompida no meio, por exemplo): regenere do zero; banda estourada não se contorna |
-| gerador muito lento | confirme que o projeto está no filesystem Linux (`~/...`), não em `/mnt/c` |
+| gerador ou `uv sync` muito lento | confirme que o projeto está no filesystem Linux (`~/...`), não em `/mnt/c` |
+| aviso `Failed to hardlink files; falling back to full copy` no uv | sintoma clássico de projeto em `/mnt/c`: mova para `~/` (clone de novo lá) |
 
 ---
 

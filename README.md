@@ -66,6 +66,7 @@ Bronze ──► Silver ──► Gold (parquet; storage via fsspec: file:// ↔
 ## Como rodar (estado atual)
 
 ```bash
+cd ~                        # SEMPRE no filesystem do Linux; /mnt/c degrada muito a performance
 git clone https://github.com/tiagolima-neviah/logistica-fictitur-bigdata.git
 cd logistica-fictitur-bigdata
 cp .env.example .env        # edite STAGING_PASSWORD
