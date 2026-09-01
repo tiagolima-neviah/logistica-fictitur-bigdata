@@ -249,7 +249,7 @@ class CatalogoComercial:
                         (
                             cli["id"], round(rnd.uniform(16, 24), 2),
                             round(rnd.uniform(0.0020, 0.0035), 5),
-                            round(rnd.uniform(150, 800), 2),
+                            round(rnd.uniform(100, 250), 2),
                         ),
                     )
 

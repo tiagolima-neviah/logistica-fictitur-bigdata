@@ -52,7 +52,7 @@ PARAMETROS = [
     ("taxa_imposto_faturamento", 0.0673, date(2020, 1, 1)),
     ("fator_cubagem_rodoviario", 300, date(2020, 1, 1)),
     ("fator_cubagem_aereo", 166.7, date(2020, 1, 1)),
-    ("custo_m3_galpao", 6.50, date(2020, 1, 1)),
+    ("custo_m3_galpao", 25.00, date(2020, 1, 1)),  # margem de armazenagem é fina de propósito
     ("custo_esteira_por_linha", 3.20, date(2020, 1, 1)),
     ("aliquota_difal_simplificada", 0.04, date(2020, 1, 1)),
     ("icms_interno", 0.12, date(2020, 1, 1)),

@@ -12,9 +12,12 @@ from logistica_fictitur.config import dsn_staging
 from logistica_fictitur.gerador.etapa1_cadastro import MundoCadastral
 from logistica_fictitur.gerador.etapa2_itens_tarifas import CatalogoComercial
 from logistica_fictitur.gerador.etapa3_arco_pedidos import ArcoPedidos
+from logistica_fictitur.gerador.etapa4_estoque_armazenagem import EstoqueArmazenagem
+
+Etapa = MundoCadastral | CatalogoComercial | ArcoPedidos | EstoqueArmazenagem
 
 
-def _rodar(nome: str, etapa: MundoCadastral | CatalogoComercial | ArcoPedidos) -> None:
+def _rodar(nome: str, etapa: Etapa) -> None:
     if etapa.ja_populado():
         print(f"{nome}: já populada, pulando.")
         return
@@ -28,9 +31,10 @@ def main() -> None:
         _rodar("Etapa 1/4 — mundo cadastral", MundoCadastral(conn))
         _rodar("Etapa 2/4 — catálogo comercial e réguas de prazo", CatalogoComercial(conn))
         _rodar("Etapa 3/4 — arco operacional de pedidos 2020-2026", ArcoPedidos(conn))
-    print("\nPara regenerar do zero: cd staging && docker compose --env-file ../.env"
+        _rodar("Etapa 4/4 — recebimento, estoque e armazenagem", EstoqueArmazenagem(conn))
+    print("\nStaging completo. Valide com: uv run regua-staging")
+    print("Para regenerar do zero: cd staging && docker compose --env-file ../.env"
           " down -v && docker compose --env-file ../.env up -d")
-    print("Etapa 4 (recebimento, estoque e armazenagem) em desenvolvimento.")
 
 
 if __name__ == "__main__":
