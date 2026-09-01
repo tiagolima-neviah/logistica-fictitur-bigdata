@@ -1,0 +1,25 @@
+# Staging da Fictitur: Postgres com o modelo relacional (DDL aplicado no 1º boot).
+# Uso: copie ../.env.example para ../.env, ajuste se quiser, e rode `docker compose up -d`.
+name: fictitur-staging
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: fictitur_staging_postgres
+    environment:
+      POSTGRES_DB: ${STAGING_DB:-db_fictitur}
+      POSTGRES_USER: ${STAGING_USER:-fictitur}
+      POSTGRES_PASSWORD: ${STAGING_PASSWORD:?defina STAGING_PASSWORD no .env}
+    ports:
+      - "${STAGING_PORT:-5433}:5432"
+    volumes:
+      - staging_pgdata:/var/lib/postgresql/data
+      - ./ddl:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${STAGING_USER:-fictitur} -d ${STAGING_DB:-db_fictitur}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  staging_pgdata:
