@@ -3,7 +3,7 @@
 # Guia de Reprodução — do clone ao staging validado
 
 <!-- nav:start -->
-[Home](../README.md) | [← Régua de Validação](04_regua_validacao.md)
+[Home](../README.md) | [← Régua de Validação](04_regua_validacao.md) | [Camada Bronze →](06_camada_bronze.md)
 <!-- nav:end -->
 
 > O manual completo para reproduzir este projeto na sua máquina: pré-requisitos, o passo a passo comentado do clone até o banco populado e aprovado pela régua, verificações de saúde e a solução dos tropeços mais comuns. O gerador é determinístico: seguindo estes passos, você chega **exatamente** à mesma base que a nossa, byte a byte.
