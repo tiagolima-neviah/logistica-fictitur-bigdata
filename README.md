@@ -55,7 +55,7 @@ Bronze ──► Silver ──► Gold (parquet; storage via fsspec: file:// ↔
 | Auditoria de qualidade (3 notebooks, 11 achados) + catálogo de regras | concluído |
 | Silver (regras aprovadas + prestação de contas, ~25M linhas em ~3s) | concluído |
 | Gold (star schema: 13 dimensões + 10 fatos particionadas, régua 25/25) | concluído |
-| Warehouse multidimensional em container + carga por partição | a iniciar |
+| Warehouse multidimensional em container + carga por partição (~11,8M linhas em ~35s) | concluído |
 | Star schema + carga no destino | a iniciar |
 | Dashboards | a iniciar |
 
@@ -82,6 +82,7 @@ uv run bronze-staging       # lake: staging → parquet com verificação de con
 uv run silver-staging       # regras do catálogo + prestação de contas (8/8)
 uv run gold-staging         # star schema: dimensões + fatos particionadas
 uv run regua-gold           # valida a gold: esperado 25 aprovados
+uv run carga-dw             # gold → warehouse Postgres (porta 5434), partição a partição
 ```
 
 O Postgres sobe na porta `5433` (configurável no `.env`) com o banco `db_fictitur`; o gerador popula ~22 milhões de linhas cobrindo 2020 a 2026 e a régua dá o veredito. O manual completo, com verificações de saúde e solução de problemas, está no [Guia de Reprodução](docs/05_guia_reproducao.md).
@@ -123,6 +124,7 @@ logistica-fictitur-bigdata/
 - [08 · Camada Silver](docs/08_camada_silver.md): o bronze conformado pelas regras aprovadas, com a prestação de contas que reprova a si mesma em divergência.
 - [09 · Matriz de Barramento](docs/09_matriz_barramento.md): dos indicadores dos painéis ao star schema: grãos, fatos, dimensões conformadas e a matriz Kimball, o contrato da gold.
 - [10 · Camada Gold](docs/10_camada_gold.md): o star schema construído (13 dimensões, 10 fatos particionadas por ano) e a régua que o prova coerente com a silver e com a história.
+- [11 · Warehouse Multidimensional](docs/11_warehouse_multidimensional.md): a gold servida em Postgres para Power BI e dashboards, carregada por partição com prestação de contas, e como levá-la para a nuvem.
 
 </details>
 

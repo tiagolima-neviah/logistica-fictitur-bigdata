@@ -3,7 +3,7 @@
 # Camada Gold — o star schema, construído e provado
 
 <!-- nav:start -->
-[Home](../README.md) | [← Matriz de Barramento](09_matriz_barramento.md)
+[Home](../README.md) | [← Matriz de Barramento](09_matriz_barramento.md) | [Warehouse →](11_warehouse_multidimensional.md)
 <!-- nav:end -->
 
 > A terceira camada do lake materializa o projeto dimensional da [Matriz de Barramento](09_matriz_barramento.md): 13 dimensões conformadas e 10 fatos, todas construídas da silver, em parquet particionado por ano. E, como toda camada deste projeto, ela prova o que fez: a **régua da gold** confere conservação, integridade e coerência antes de qualquer dashboard encostar nela.
