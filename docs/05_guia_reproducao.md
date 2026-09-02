@@ -75,6 +75,14 @@ uv run regua-gold        # 25 checks de consistência (esperado: 25 aprovados)
 
 Os arquivos ficam em `data/lake/{bronze,silver,gold}` (ou onde `LAKE_URL` apontar). Para explorar com SQL, os notebooks em `notebooks/` mostram o caminho; o [notebook 04](../notebooks/04_demonstracao_gold.ipynb) percorre o star schema com gráficos.
 
+**9. Carregue o warehouse multidimensional** (o segundo Postgres do compose, porta `5434`, já de pé desde o passo 3; defina `DW_PASSWORD` no `.env`):
+
+```bash
+uv run carga-dw          # gold → Postgres dimensional, partição a partição (~35 s)
+```
+
+Conecte seu Power BI ou cliente SQL em `localhost:5434`, banco `dw_fictitur`, schemas `dim` e `fato`. Para subir só alguns anos, use `DW_ANOS=2024,2025,2026` no `.env`.
+
 ## 3. Verificações de saúde
 
 ```bash

@@ -186,6 +186,8 @@ FATOS: dict[str, str] = {
                md.transportador_id                  AS sk_transportador,
                v.sk_veiculo                         AS sk_veiculo,
                fp.sk_faixa_peso                     AS sk_faixa_peso,
+               mf.sk_meta_frete                     AS sk_meta_frete,
+               p.tipo_destino                       AS tipo_destino,
                ff.ss                                AS ss,
                ff.valor_frete, ff.valor_frete_icms,
                ff.valor_frete_icms - ff.valor_frete AS icms,
@@ -202,6 +204,9 @@ FATOS: dict[str, str] = {
         LEFT JOIN gold_dimensoes_dim_faixa_peso fp
                ON ff.peso_faturado >= fp.peso_min
               AND (fp.peso_max IS NULL OR ff.peso_faturado < fp.peso_max)
+        LEFT JOIN silver_cadastro_municipio mu ON mu.id = en.municipio_id
+        LEFT JOIN gold_dimensoes_dim_meta_frete mf
+               ON mf.regiao_id = mu.regiao_id AND mf.tipo_destino = p.tipo_destino
         LEFT JOIN material mt                 ON mt.ss = ff.ss
     """,
     "ft_validade": f"""

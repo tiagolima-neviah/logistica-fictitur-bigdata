@@ -43,6 +43,27 @@ def uri_staging() -> str:
     return f"postgresql://{usuario}:{senha}@{host}:{porta}/{banco}"
 
 
+def dsn_warehouse() -> str:
+    """DSN libpq do warehouse multidimensional (variáveis DW_*; Neon = trocar host/senha)."""
+    _carregar_env()
+    senha = os.environ.get("DW_PASSWORD")
+    if not senha:
+        raise RuntimeError("DW_PASSWORD ausente: defina no .env (ver .env.example).")
+    return (
+        f"host={os.environ.get('DW_HOST', 'localhost')} "
+        f"port={os.environ.get('DW_PORT', '5434')} "
+        f"dbname={os.environ.get('DW_DB', 'dw_fictitur')} "
+        f"user={os.environ.get('DW_USER', 'fictitur')} password={senha}"
+    )
+
+
+def anos_carga_dw() -> list[int] | None:
+    """Partições a carregar no warehouse (DW_ANOS='2024,2025'); None = todas."""
+    _carregar_env()
+    bruto = os.environ.get("DW_ANOS", "").strip()
+    return [int(a) for a in bruto.split(",") if a.strip()] or None
+
+
 def url_lake() -> str:
     """Onde o lake vive, em URL fsspec: `file://...` local ou `s3://...` (12-factor).
 

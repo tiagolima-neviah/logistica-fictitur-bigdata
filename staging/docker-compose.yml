@@ -21,5 +21,25 @@ services:
       timeout: 3s
       retries: 10
 
+  # Warehouse multidimensional (fase D): o star schema da gold servido em Postgres,
+  # para dashboards e Power BI. Nasce vazio; `uv run carga-dw` popula por partição.
+  warehouse:
+    image: postgres:16-alpine
+    container_name: fictitur_warehouse_postgres
+    environment:
+      POSTGRES_DB: ${DW_DB:-dw_fictitur}
+      POSTGRES_USER: ${DW_USER:-fictitur}
+      POSTGRES_PASSWORD: ${DW_PASSWORD:?defina DW_PASSWORD no .env}
+    ports:
+      - "${DW_PORT:-5434}:5432"
+    volumes:
+      - warehouse_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DW_USER:-fictitur} -d ${DW_DB:-dw_fictitur}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
 volumes:
   staging_pgdata:
+  warehouse_pgdata:
