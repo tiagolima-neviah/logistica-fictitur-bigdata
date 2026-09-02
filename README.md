@@ -108,6 +108,7 @@ logistica-fictitur-bigdata/
 - [06 · Camada Bronze](docs/06_camada_bronze.md): o staging congelado em parquet, com linhagem, verificação de contagens e storage plugável.
 - [07 · Catálogo de Achados da Silver](docs/07_catalogo_achados_silver.md): os 11 achados da auditoria de qualidade e as regras de tratamento, o contrato da camada.
 - [08 · Camada Silver](docs/08_camada_silver.md): o bronze conformado pelas regras aprovadas, com a prestação de contas que reprova a si mesma em divergência.
+- [09 · Matriz de Barramento](docs/09_matriz_barramento.md): dos indicadores dos painéis ao star schema: grãos, fatos, dimensões conformadas e a matriz Kimball, o contrato da gold.
 - Notebooks da auditoria (executados, com as evidências): [01 cadastro](notebooks/01_qualidade_cadastro.ipynb) · [02 pedidos e entregas](notebooks/02_qualidade_pedidos_entregas.ipynb) · [03 estoque e financeiro](notebooks/03_qualidade_estoque_financeiro.ipynb).
 - Rotinas de manutenção adicionais: publicadas junto com o pipeline.
 

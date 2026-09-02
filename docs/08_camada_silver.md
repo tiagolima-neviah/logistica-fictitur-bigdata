@@ -3,7 +3,7 @@
 # Camada Silver — o bronze conformado, com prestação de contas
 
 <!-- nav:start -->
-[Home](../README.md) | [← Catálogo de Achados](07_catalogo_achados_silver.md)
+[Home](../README.md) | [← Catálogo de Achados](07_catalogo_achados_silver.md) | [Matriz de Barramento →](09_matriz_barramento.md)
 <!-- nav:end -->
 
 > A segunda camada do lake: as mesmas tabelas do bronze, agora conformadas pelas regras aprovadas no [Catálogo de Achados](07_catalogo_achados_silver.md). A silver não interpreta por conta própria: ela executa um contrato, e prova que executou exatamente ele: cada regra tem a medida prometida no catálogo congelada no código, e a execução **reprova a si mesma** se marcar uma linha a mais ou a menos do que prometeu.
