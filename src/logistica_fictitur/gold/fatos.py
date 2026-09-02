@@ -235,4 +235,144 @@ FATOS: dict[str, str] = {
                extract(year FROM inv.dt_inicio)::int AS ano
         FROM silver_fwm_inventario inv
     """,
+    # ------------------------------------------------------------------
+    # Painel 2 · Margens por Operação (G4). A cadeia da MC, nunca digitada:
+    #   receita − imposto sobre faturamento − ICMS − custo variável = MC
+    # Devoluções/reentregas entram como operações de receita zero na
+    # competência em que ocorrem (regra herdada do cofre de regras).
+    # ------------------------------------------------------------------
+    "ft_mc_operacao": f"""
+        WITH parametro AS (
+            SELECT
+              (SELECT valor FROM silver_financeiro_parametro_financeiro
+               WHERE chave = 'taxa_imposto_faturamento'
+               ORDER BY vigencia_inicio DESC LIMIT 1) AS taxa_imposto,
+              (SELECT valor FROM silver_financeiro_parametro_financeiro
+               WHERE chave = 'custo_m3_galpao'
+               ORDER BY vigencia_inicio DESC LIMIT 1) AS custo_m3
+        ),
+        custo_frete AS (
+            SELECT ss, sum(valor) AS cv FROM silver_financeiro_custo_operacao
+            WHERE categoria = 'CUSTO_FRETE' GROUP BY 1
+        ),
+        minuta_do_pedido AS (
+            SELECT mp.ss, min(m.tipo_veiculo) AS tipo_veiculo
+            FROM silver_expedicao_minuta_pedido mp
+            JOIN silver_expedicao_minuta m ON m.id = mp.minuta_id
+            GROUP BY 1
+        ),
+        transporte AS (
+            SELECT {_sk('ff.competencia')}           AS sk_competencia,
+                   {_sk('ff.dt_faturamento')}        AS sk_data_faturamento,
+                   ff.organizacao_id                AS sk_cliente,
+                   1                                AS sk_tipo_operacao,
+                   p.modalidade_id                  AS sk_modalidade,
+                   en.municipio_id                  AS sk_geografia,
+                   v.sk_veiculo                     AS sk_veiculo,
+                   ff.ss                            AS ss,
+                   ff.valor_frete_icms              AS receita,
+                   ff.valor_frete_icms * pr.taxa_imposto AS imposto_faturamento,
+                   ff.valor_frete_icms - ff.valor_frete  AS icms,
+                   coalesce(cf.cv, 0)               AS custo_variavel,
+                   ff.peso_faturado                 AS peso_kg,
+                   p.valor_orcamento                AS valor_nf,
+                   ff.fl_frete_simbolico,
+                   false                            AS fl_dev_reentrega,
+                   ff.competencia                   AS competencia
+            FROM silver_faturamento_fatura_frete ff
+            CROSS JOIN parametro pr
+            JOIN silver_fwm_pedido p              ON p.ss = ff.ss
+            LEFT JOIN silver_cadastro_endereco en ON en.id = p.endereco_entrega_id
+            LEFT JOIN minuta_do_pedido md         ON md.ss = ff.ss
+            LEFT JOIN gold_dimensoes_dim_veiculo v ON v.tipo_veiculo = md.tipo_veiculo
+            LEFT JOIN custo_frete cf              ON cf.ss = ff.ss
+        ),
+        dev_reentrega AS (
+            SELECT {_sk('c.competencia')}            AS sk_competencia,
+                   {_sk('c.dt_lancamento')}          AS sk_data_faturamento,
+                   c.organizacao_id                 AS sk_cliente,
+                   1                                AS sk_tipo_operacao,
+                   p.modalidade_id                  AS sk_modalidade,
+                   en.municipio_id                  AS sk_geografia,
+                   NULL::bigint                     AS sk_veiculo,
+                   c.ss                             AS ss,
+                   0                                AS receita,
+                   0                                AS imposto_faturamento,
+                   0                                AS icms,
+                   c.valor                          AS custo_variavel,
+                   NULL::numeric                    AS peso_kg,
+                   NULL::numeric                    AS valor_nf,
+                   false                            AS fl_frete_simbolico,
+                   true                             AS fl_dev_reentrega,
+                   c.competencia                    AS competencia
+            FROM silver_financeiro_custo_operacao c
+            JOIN silver_fwm_pedido p              ON p.ss = c.ss
+            LEFT JOIN silver_cadastro_endereco en ON en.id = p.endereco_entrega_id
+            WHERE c.categoria = 'DEV_REENTREGA'
+        ),
+        armazenagem AS (
+            SELECT {_sk('fa.competencia')}           AS sk_competencia,
+                   {_sk('fa.dt_faturamento')}        AS sk_data_faturamento,
+                   fa.organizacao_id                AS sk_cliente,
+                   2                                AS sk_tipo_operacao,
+                   NULL::bigint                     AS sk_modalidade,
+                   NULL::bigint                     AS sk_geografia,
+                   NULL::bigint                     AS sk_veiculo,
+                   NULL::bigint                     AS ss,
+                   fa.valor_cobrado                 AS receita,
+                   fa.valor_cobrado * pr.taxa_imposto AS imposto_faturamento,
+                   0                                AS icms,
+                   fa.m3_medio * pr.custo_m3        AS custo_variavel,
+                   NULL::numeric                    AS peso_kg,
+                   fa.valor_material_medio          AS valor_nf,
+                   false                            AS fl_frete_simbolico,
+                   false                            AS fl_dev_reentrega,
+                   fa.competencia                   AS competencia
+            FROM silver_faturamento_fatura_armazenagem fa
+            CROSS JOIN parametro pr
+        ),
+        tudo AS (
+            SELECT * FROM transporte
+            UNION ALL SELECT * FROM dev_reentrega
+            UNION ALL SELECT * FROM armazenagem
+        )
+        SELECT sk_competencia, sk_data_faturamento, sk_cliente, sk_tipo_operacao,
+               sk_modalidade, sk_geografia, sk_veiculo, ss,
+               receita, imposto_faturamento, icms,
+               imposto_faturamento + icms                          AS impostos_totais,
+               custo_variavel,
+               imposto_faturamento + icms + custo_variavel         AS custos_impostos,
+               receita - imposto_faturamento - icms - custo_variavel AS mc,
+               peso_kg, valor_nf, fl_frete_simbolico, fl_dev_reentrega,
+               extract(year FROM competencia)::int AS ano
+        FROM tudo
+    """,
+    "ft_armazenagem_cobranca": f"""
+        WITH custo AS (
+            SELECT valor AS custo_m3 FROM silver_financeiro_parametro_financeiro
+            WHERE chave = 'custo_m3_galpao' ORDER BY vigencia_inicio DESC LIMIT 1
+        )
+        SELECT {_sk('fa.competencia')}               AS sk_competencia,
+               fa.organizacao_id                    AS sk_cliente,
+               2                                    AS sk_tipo_operacao,
+               fa.m3_medio, fa.valor_material_medio,
+               t.valor_m3                           AS tarifa_valor_m3,
+               t.aliquota_ad_valorem                AS tarifa_ad_valorem,
+               t.valor_minimo_mensal                AS tarifa_minimo,
+               greatest(fa.m3_medio * t.valor_m3 + fa.valor_material_medio * t.aliquota_ad_valorem,
+                        t.valor_minimo_mensal)      AS valor_calculado_tarifa,
+               fa.valor_cobrado,
+               fa.valor_cobrado
+                 - greatest(fa.m3_medio * t.valor_m3
+                            + fa.valor_material_medio * t.aliquota_ad_valorem,
+                            t.valor_minimo_mensal)  AS diferenca_cobranca,
+               fa.m3_medio * c.custo_m3             AS custo_galpao,
+               (fa.competencia >= DATE '2024-08-01') AS fl_politica_aging,
+               extract(year FROM fa.competencia)::int AS ano
+        FROM silver_faturamento_fatura_armazenagem fa
+        CROSS JOIN custo c
+        LEFT JOIN silver_financeiro_tarifa_armazenagem t
+               ON t.organizacao_id = fa.organizacao_id
+              AND t.vigencia_inicio <= fa.competencia
+    """,
 }

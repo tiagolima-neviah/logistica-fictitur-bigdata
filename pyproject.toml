@@ -33,6 +33,7 @@ gerador-staging = "logistica_fictitur.gerador.principal:main"
 bronze-staging = "logistica_fictitur.bronze.extrator:main"
 silver-staging = "logistica_fictitur.silver.transformador:main"
 gold-staging = "logistica_fictitur.gold.construtor:main"
+regua-gold = "logistica_fictitur.validacao.regua_gold:main"
 
 [build-system]
 requires = ["hatchling"]
