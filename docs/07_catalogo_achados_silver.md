@@ -16,7 +16,7 @@ Cinco regras invioláveis governam qualquer tratamento neste projeto: o **bronze
 
 | código | achado | medida | regra proposta na silver |
 |---|---|---|---|
-| CAD-01 | `meta_frete` sem nenhuma linha | 0 linhas | Documentar como vazio estrutural; a silver não a cria (ausência não se preenche) |
+| CAD-01 | `meta_frete` sem nenhuma linha | 0 linhas (base de 2026-09-02) | Documentar como vazio estrutural; a silver não a cria (ausência não se preenche). **Resolvido na origem em 2026-09-02:** metas são parametrização de negócio, e o cadastro passou a nascer populado (24 metas: 6 regiões × 4 tipos de destino); a régua da gold confere a dimensão correspondente |
 | CAD-02 | Itens sem valor unitário (furo de cobertura fiscal) | 112 itens (1,65%) | `fl_sem_valor_unitario = true`; preço não se inventa; indicadores de valor excluem ou destacam esses itens |
 | CAD-03 | Colunas 100% nulas no catálogo de itens (`url_foto`, `material`, `classe_anvisa`, `cod_item_cliente` parcial¹) | 4 colunas | Colunas 100% nulas ficam FORA da silver de itens; documentadas aqui como cadastro incompleto de origem |
 | PED-01 | Entregas com data impossível (sentinelas 1899-12-30, 2055-08-11, 2098-08-22) | 5.126 entregas (0,50%) | `dt_entrega_conformada = NULL` + `fl_data_entrega_invalida = true` + valor original preservado em `dt_entrega_original`; a data verdadeira não se adivinha |

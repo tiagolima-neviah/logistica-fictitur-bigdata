@@ -6,7 +6,7 @@
 [Home](../README.md) | [← Matriz de Barramento](09_matriz_barramento.md) | [Warehouse →](11_warehouse_multidimensional.md)
 <!-- nav:end -->
 
-> A terceira camada do lake materializa o projeto dimensional da [Matriz de Barramento](09_matriz_barramento.md): 13 dimensões conformadas e 10 fatos, todas construídas da silver, em parquet particionado por ano. E, como toda camada deste projeto, ela prova o que fez: a **régua da gold** confere conservação, integridade e coerência antes de qualquer dashboard encostar nela.
+> A terceira camada do lake materializa o projeto dimensional da [Matriz de Barramento](09_matriz_barramento.md): 14 dimensões conformadas e 10 fatos, todas construídas da silver, em parquet particionado por ano. E, como toda camada deste projeto, ela prova o que fez: a **régua da gold** confere conservação, integridade e coerência antes de qualquer dashboard encostar nela.
 
 ## 1. O que existe na gold
 
@@ -18,7 +18,7 @@
 |---|---|---|---|
 | Materiais | `ft_tracking` | item de pedido, com a data em três papéis (solicitação, **prazo prometido**, entrega) | ~4,5 M |
 | Materiais | `ft_saida` | item de pedido expedido | ~4,4 M |
-| Materiais | `ft_frete` | fatura de frete (SS), com faixa de peso | ~1,0 M |
+| Materiais | `ft_frete` | fatura de frete (SS), com faixa de peso e meta de R$/kg (região × tipo de destino) | ~1,0 M |
 | Materiais | `ft_recebimento` | item recebido por ordem de recebimento | ~579 mil |
 | Materiais | `ft_estoque_foto` | foto mensal × item × galpão | ~159 mil |
 | Materiais | `ft_agendamento` | agendamento de chegada | ~119 mil |
@@ -33,7 +33,7 @@ Três decisões de desenho que valem entender: **medidas-base, não apresentaç�
 
 ```bash
 uv run gold-staging      # reconstrói dimensões e fatos (~2 s)
-uv run regua-gold        # 25 checks de consistência interna
+uv run regua-gold        # 26 checks de consistência interna
 ```
 
 A régua da gold não compara com nenhuma referência externa: a gold precisa ser coerente **consigo mesma e com as camadas abaixo**. Três famílias de verificação: **conservação** (linhas e somas das fatos batem com a silver, ao centavo na receita), **integridade dimensional** (toda chave obrigatória resolve na sua dimensão) e **coerência de indicadores** (o OTIF por ano apurado na gold cai nas mesmas bandas da régua do staging, e as margens também: a história sobrevive às três camadas). Uma reprovação significa reconstruir depois de achar a causa, nunca ajustar o número.

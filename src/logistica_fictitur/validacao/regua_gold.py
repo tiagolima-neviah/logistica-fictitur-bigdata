@@ -76,6 +76,7 @@ def executar() -> list[Resultado]:
         ("ft_tracking", "sk_data_solicitacao", "dim_data", "sk_data"),
         ("ft_estoque_foto", "sk_galpao", "dim_galpao", "sk_galpao"),
         ("ft_frete", "sk_faixa_peso", "dim_faixa_peso", "sk_faixa_peso"),
+        ("ft_frete", "sk_meta_frete", "dim_meta_frete", "sk_meta_frete"),
         ("ft_mc_operacao", "sk_tipo_operacao", "dim_tipo_operacao", "sk_tipo_operacao"),
         ("ft_mc_operacao", "sk_competencia", "dim_data", "sk_data"),
     ]:

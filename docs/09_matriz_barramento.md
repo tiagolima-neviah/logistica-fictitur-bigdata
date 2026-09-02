@@ -50,7 +50,7 @@ As nove já construídas no G1 atendem a maior parte dos filtros: `dim_data`, `d
 | `dim_veiculo` | tipo de veículo da minuta (fiorino, VUC, toco, truck, carreta), filtro dos dois painéis |
 | `dim_faixa_peso` | as faixas de peso (a "máscara") que classificam fretes e explicam R$/kg |
 | `dim_fornecedor` | fornecedores dos agendamentos (hoje texto livre na fato) |
-| `dim_meta_frete` | metas de R$/kg por região × tipo de destino; hoje a tabela de origem está vazia (achado CAD-01), ver a decisão pendente na Seção 6 |
+| `dim_meta_frete` | metas de R$/kg por região × tipo de destino (24 metas; a origem nascia vazia, achado CAD-01, resolvido na origem conforme a decisão 2 da Seção 6) |
 
 Comparativos "vs ano anterior / vs mês anterior" e faixas de exibição são **apresentação**, não dimensão.
 
@@ -74,7 +74,7 @@ Cada X é uma chave substituta (`sk_*`) apontando para a mesma dimensão, e é i
 ## 6. Decisões pendentes de aprovação
 
 1. **Grão do tracking:** manter o grão **item de pedido** (como o painel original opera, com contagens distintas de pedido para os indicadores de pedido) ou desdobrar em `ft_pedido` (grão pedido) + `ft_pedido_item`? Recomendação: **um só fato no grão item**, fiel ao uso do painel e mais simples de manter.
-2. **Metas de frete (CAD-01):** a tabela `meta_frete` chegou vazia do staging. Metas são **parametrização de negócio**, não dado operacional; a recomendação é **populá-la no gerador como cadastro legítimo** (regiões × tipos de destino) na próxima regeneração, e não inventá-la na gold. Até lá, o indicador "realizado × meta" nasce sem meta.
+2. **Metas de frete (CAD-01):** a tabela `meta_frete` chegou vazia do staging. Metas são **parametrização de negócio**, não dado operacional; a recomendação é **populá-la no gerador como cadastro legítimo** (regiões × tipos de destino) na próxima regeneração, e não inventá-la na gold. **Aprovado e implementado em 2026-09-02:** o gerador passou a criar 24 metas (6 regiões × 4 tipos de destino), a `dim_meta_frete` existe e a `ft_frete` carrega `sk_meta_frete`.
 3. **Ordem de construção:** as fatos do Painel 1 primeiro (o primeiro dashboard da vitrine), depois as do Painel 2. Produção e outros temas entram por demanda, pela mesma matriz.
 
 ---

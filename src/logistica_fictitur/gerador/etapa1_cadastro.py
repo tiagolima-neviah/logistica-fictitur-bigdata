@@ -199,6 +199,20 @@ class MundoCadastral:
                 " VALUES (%s, %s, %s)",
                 PARAMETROS,
             )
+            # Metas comerciais de R$/kg por região × tipo de destino (parametrização
+            # legítima de negócio, decisão do Tiago em 2026-09-02): cresce com a
+            # distância e é mais apertada para bases e distribuidores (volume).
+            base_regiao = {1: 0.9, 2: 1.1, 3: 1.4, 4: 1.8, 5: 2.6, 6: 3.2}
+            fator_destino = {"LOJA": 1.15, "BASE": 0.85, "DISTRIBUIDOR": 0.95, "REPS": 1.05}
+            cur.executemany(
+                "INSERT INTO cadastro.meta_frete (regiao_id, tipo_destino, target_rs_kg)"
+                " VALUES (%s, %s, %s)",
+                [
+                    (regiao, destino, round(base * fator, 3))
+                    for regiao, base in base_regiao.items()
+                    for destino, fator in fator_destino.items()
+                ],
+            )
 
     def _endereco(
         self, cur: psycopg.Cursor, org_id: int | None, tipo: str, cidade: str, uf: str,

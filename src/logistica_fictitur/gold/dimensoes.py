@@ -104,4 +104,10 @@ DIMENSOES: dict[str, str] = {
         FROM (SELECT DISTINCT fornecedor FROM silver_fwm_agendamento
               WHERE fornecedor IS NOT NULL)
     """,
+    "dim_meta_frete": """
+        SELECT m.id AS sk_meta_frete, m.regiao_id, r.nome AS regiao_comercial,
+               m.tipo_destino, m.target_rs_kg
+        FROM silver_cadastro_meta_frete m
+        JOIN silver_cadastro_regiao r ON r.id = m.regiao_id
+    """,
 }
