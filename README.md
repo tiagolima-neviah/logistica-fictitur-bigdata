@@ -100,18 +100,42 @@ logistica-fictitur-bigdata/
 
 ## Documentação
 
+<details open>
+<summary><strong>Regras de negócio e documentação técnica</strong> (leia na ordem)</summary>
+
+**Fundação**
+
 - [01 · Entendimento do Negócio](docs/01_entendimento_negocio.md): quem é a Fictitur, como opera, as dores e o objetivo do projeto.
 - [02 · Entendimento dos Dados](docs/02_entendimento_dados.md): os 5 schemas e o papel de cada grupo de tabelas, em linguagem de negócio.
 - [03 · Modelo de Dados do Staging](docs/03_modelo_dados_staging.md): a referência técnica, com o diagrama e o objetivo de cada uma das 50 tabelas.
 - [04 · Régua de Validação](docs/04_regua_validacao.md): o contrato de aceite dos dados sintéticos e como rodá-lo.
 - [05 · Guia de Reprodução](docs/05_guia_reproducao.md): o manual completo do clone ao staging validado, com healthchecks e troubleshooting.
+
+**Camadas do lake**
+
 - [06 · Camada Bronze](docs/06_camada_bronze.md): o staging congelado em parquet, com linhagem, verificação de contagens e storage plugável.
-- [07 · Catálogo de Achados da Silver](docs/07_catalogo_achados_silver.md): os 11 achados da auditoria de qualidade e as regras de tratamento, o contrato da camada.
+- [07 · Catálogo de Achados da Silver](docs/07_catalogo_achados_silver.md): os achados da auditoria de qualidade e as regras de tratamento, o contrato da camada.
 - [08 · Camada Silver](docs/08_camada_silver.md): o bronze conformado pelas regras aprovadas, com a prestação de contas que reprova a si mesma em divergência.
 - [09 · Matriz de Barramento](docs/09_matriz_barramento.md): dos indicadores dos painéis ao star schema: grãos, fatos, dimensões conformadas e a matriz Kimball, o contrato da gold.
-- Notebooks da auditoria (executados, com as evidências): [01 cadastro](notebooks/01_qualidade_cadastro.ipynb) · [02 pedidos e entregas](notebooks/02_qualidade_pedidos_entregas.ipynb) · [03 estoque e financeiro](notebooks/03_qualidade_estoque_financeiro.ipynb).
+
+</details>
+
+<details>
+<summary><strong>Notebooks</strong> (executados, com as evidências e os gráficos)</summary>
+
+**Auditoria de qualidade do bronze**
+
+- [01 · Cadastro](notebooks/01_qualidade_cadastro.ipynb)
+- [02 · Pedidos e entregas](notebooks/02_qualidade_pedidos_entregas.ipynb)
+- [03 · Estoque e financeiro](notebooks/03_qualidade_estoque_financeiro.ipynb)
+
+**Demonstração**
+
 - [04 · Demonstração da gold](notebooks/04_demonstracao_gold.ipynb): seis perguntas de negócio respondidas pelo star schema, com gráficos (OTIF pelo eixo da promessa, sazonalidade, porte, receita por região, estoque, no-show).
-- Rotinas de manutenção adicionais: publicadas junto com o pipeline.
+
+</details>
+
+Rotinas de manutenção adicionais serão publicadas junto com o pipeline.
 
 ---
 
