@@ -3,7 +3,7 @@
 # Camada Bronze — o staging congelado em parquet
 
 <!-- nav:start -->
-[Home](../README.md) | [← Guia de Reprodução](05_guia_reproducao.md)
+[Home](../README.md) | [← Guia de Reprodução](05_guia_reproducao.md) | [Catálogo de Achados →](07_catalogo_achados_silver.md)
 <!-- nav:end -->
 
 > A primeira camada do lake: um espelho fiel das 50 tabelas do staging em arquivos parquet, com metadados de linhagem e verificação de contagens. A partir daqui o pipeline analítico não toca mais o banco: lê arquivos, baratos de guardar e rápidos de varrer, no storage que você escolher.
