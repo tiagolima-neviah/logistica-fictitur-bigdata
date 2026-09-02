@@ -3,7 +3,7 @@
 # Catálogo de Achados e Regras da Silver
 
 <!-- nav:start -->
-[Home](../README.md) | [← Camada Bronze](06_camada_bronze.md)
+[Home](../README.md) | [← Camada Bronze](06_camada_bronze.md) | [Camada Silver →](08_camada_silver.md)
 <!-- nav:end -->
 
 > O contrato da camada silver: os 11 achados da auditoria de qualidade do bronze (notebooks 01 a 03), cada um com sua medida, a regra de tratamento proposta e o princípio que a ampara. **Nenhuma transformação roda antes deste catálogo ser aprovado pelo dono do projeto**; depois de aprovado, a silver presta contas contra ele: cada alteração feita precisa corresponder a uma regra daqui, e nenhuma regra pode alterar mais (nem menos) do que prometeu.
