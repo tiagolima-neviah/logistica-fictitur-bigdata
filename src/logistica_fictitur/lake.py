@@ -36,6 +36,16 @@ def conectar() -> duckdb.DuckDBPyConnection:
             conn.execute(
                 f"CREATE VIEW \"{view}\" AS SELECT * FROM read_parquet('{caminho_sql}')"
             )
+        # fatos particionadas (hive): gold/fatos/<fato>/ano=YYYY/*.parquet → uma view por fato
+        for pasta in fs.glob(f"{raiz}/{camada}/*/*/ano=*"):
+            partes = str(pasta).replace("\\", "/").split("/")
+            schema, fato = partes[-3], partes[-2]
+            view = f"{camada}_{schema}_{fato}"
+            base = "/".join(partes[:-1]).replace("'", "''")
+            conn.execute(
+                f"CREATE OR REPLACE VIEW \"{view}\" AS SELECT * FROM"
+                f" read_parquet('{base}/*/*.parquet', hive_partitioning = true)"
+            )
     return conn
 
 

@@ -30,6 +30,12 @@ Cinco regras invioláveis governam qualquer tratamento neste projeto: o **bronze
 
 ¹ `cod_item_cliente` tem nulos parciais estruturais e permanece; as excluídas são apenas as 100% nulas.
 
+### 2.1 Adendo aprovado em 2026-09-02 (achado da régua da gold)
+
+| código | achado | medida | regra aprovada na silver |
+|---|---|---|---|
+| FIN-03 | Lançamentos de custo de devolução/reentrega com competência impossível (herdada de entregas com data-sentinela: 1900, 2055, 2098) | 73 lançamentos (0,008% das linhas, 0,004% do valor) | `competencia` e `dt_lancamento` anulados + originais preservados + `fl_competencia_invalida = true`, o mesmo padrão do PED-01; na gold, o membro especial "data inválida" da `dim_data` (`sk_data = -1`) recebe essas linhas na partição `ano=-1`, para que nada suma e nada contamine os anos reais. Impacto financeiro desprezível, impacto estrutural real (partições fantasmas e chaves sem calendário) |
+
 ## 3. Ordem de aplicação (e por quê)
 
 1. **Sentinelas e impossíveis primeiro** (PED-01, EST-01): o notebook 02 demonstrou que datas impossíveis se disfarçam de "atraso sem justificativa"; qualquer regra que leia datas antes desta produz falso achado.

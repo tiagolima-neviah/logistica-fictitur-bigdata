@@ -10,6 +10,7 @@ dependencies = [
     "adbc-driver-postgresql>=1.12.0",
     "duckdb>=1.5.5",
     "fsspec>=2026.7.0",
+    "matplotlib>=3.11.1",
     "pandas>=3.0.5",
     "psycopg[binary]>=3.2",
     "pyarrow>=25.0.1",
@@ -31,6 +32,8 @@ regua-staging = "logistica_fictitur.validacao.regua:main"
 gerador-staging = "logistica_fictitur.gerador.principal:main"
 bronze-staging = "logistica_fictitur.bronze.extrator:main"
 silver-staging = "logistica_fictitur.silver.transformador:main"
+gold-staging = "logistica_fictitur.gold.construtor:main"
+regua-gold = "logistica_fictitur.validacao.regua_gold:main"
 
 [build-system]
 requires = ["hatchling"]

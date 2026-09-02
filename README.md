@@ -54,7 +54,8 @@ Bronze ──► Silver ──► Gold (parquet; storage via fsspec: file:// ↔
 | Bronze (staging → parquet via fsspec, ~25M linhas em ~21s) | concluído |
 | Auditoria de qualidade (3 notebooks, 11 achados) + catálogo de regras | concluído |
 | Silver (regras aprovadas + prestação de contas, ~25M linhas em ~3s) | concluído |
-| Gold (datamarts) | a iniciar |
+| Gold (star schema: 13 dimensões + 10 fatos particionadas, régua 25/25) | concluído |
+| Warehouse multidimensional em container + carga por partição | a iniciar |
 | Star schema + carga no destino | a iniciar |
 | Dashboards | a iniciar |
 
@@ -77,6 +78,10 @@ cd staging && docker compose --env-file ../.env up -d && cd ..
 uv sync
 uv run gerador-staging      # popula 2020-2026 (~15 min, determinístico)
 uv run regua-staging        # valida: esperado 28 aprovados, 0 reprovados
+uv run bronze-staging       # lake: staging → parquet com verificação de contagens
+uv run silver-staging       # regras do catálogo + prestação de contas (8/8)
+uv run gold-staging         # star schema: dimensões + fatos particionadas
+uv run regua-gold           # valida a gold: esperado 25 aprovados
 ```
 
 O Postgres sobe na porta `5433` (configurável no `.env`) com o banco `db_fictitur`; o gerador popula ~22 milhões de linhas cobrindo 2020 a 2026 e a régua dá o veredito. O manual completo, com verificações de saúde e solução de problemas, está no [Guia de Reprodução](docs/05_guia_reproducao.md).
@@ -100,16 +105,43 @@ logistica-fictitur-bigdata/
 
 ## Documentação
 
+<details open>
+<summary><strong>Regras de negócio e documentação técnica</strong> (leia na ordem)</summary>
+
+**Fundação**
+
 - [01 · Entendimento do Negócio](docs/01_entendimento_negocio.md): quem é a Fictitur, como opera, as dores e o objetivo do projeto.
 - [02 · Entendimento dos Dados](docs/02_entendimento_dados.md): os 5 schemas e o papel de cada grupo de tabelas, em linguagem de negócio.
 - [03 · Modelo de Dados do Staging](docs/03_modelo_dados_staging.md): a referência técnica, com o diagrama e o objetivo de cada uma das 50 tabelas.
 - [04 · Régua de Validação](docs/04_regua_validacao.md): o contrato de aceite dos dados sintéticos e como rodá-lo.
 - [05 · Guia de Reprodução](docs/05_guia_reproducao.md): o manual completo do clone ao staging validado, com healthchecks e troubleshooting.
+
+**Camadas do lake**
+
 - [06 · Camada Bronze](docs/06_camada_bronze.md): o staging congelado em parquet, com linhagem, verificação de contagens e storage plugável.
-- [07 · Catálogo de Achados da Silver](docs/07_catalogo_achados_silver.md): os 11 achados da auditoria de qualidade e as regras de tratamento, o contrato da camada.
+- [07 · Catálogo de Achados da Silver](docs/07_catalogo_achados_silver.md): os achados da auditoria de qualidade e as regras de tratamento, o contrato da camada.
 - [08 · Camada Silver](docs/08_camada_silver.md): o bronze conformado pelas regras aprovadas, com a prestação de contas que reprova a si mesma em divergência.
-- Notebooks da auditoria (executados, com as evidências): [01 cadastro](notebooks/01_qualidade_cadastro.ipynb) · [02 pedidos e entregas](notebooks/02_qualidade_pedidos_entregas.ipynb) · [03 estoque e financeiro](notebooks/03_qualidade_estoque_financeiro.ipynb).
-- Rotinas de manutenção adicionais: publicadas junto com o pipeline.
+- [09 · Matriz de Barramento](docs/09_matriz_barramento.md): dos indicadores dos painéis ao star schema: grãos, fatos, dimensões conformadas e a matriz Kimball, o contrato da gold.
+- [10 · Camada Gold](docs/10_camada_gold.md): o star schema construído (13 dimensões, 10 fatos particionadas por ano) e a régua que o prova coerente com a silver e com a história.
+
+</details>
+
+<details>
+<summary><strong>Notebooks</strong> (executados, com as evidências e os gráficos)</summary>
+
+**Auditoria de qualidade do bronze**
+
+- [01 · Cadastro](notebooks/01_qualidade_cadastro.ipynb)
+- [02 · Pedidos e entregas](notebooks/02_qualidade_pedidos_entregas.ipynb)
+- [03 · Estoque e financeiro](notebooks/03_qualidade_estoque_financeiro.ipynb)
+
+**Demonstração**
+
+- [04 · Demonstração da gold](notebooks/04_demonstracao_gold.ipynb): seis perguntas de negócio respondidas pelo star schema, com gráficos (OTIF pelo eixo da promessa, sazonalidade, porte, receita por região, estoque, no-show).
+
+</details>
+
+Rotinas de manutenção adicionais serão publicadas junto com o pipeline.
 
 ---
 
