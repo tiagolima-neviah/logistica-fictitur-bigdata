@@ -66,4 +66,38 @@ DIMENSOES: dict[str, str] = {
     "dim_motivo_atraso": """
         SELECT id AS sk_motivo_atraso, descricao FROM silver_expedicao_motivo_atraso
     """,
+    # --- dimensões pedidas pela matriz de barramento (docs/09) ---
+    "dim_tipo_operacao": """
+        SELECT * FROM (VALUES
+            (1, 'TRANSPORTE', 'Frete de entrega'),
+            (2, 'ARMAZENAGEM', 'Cobrança mensal de armazenagem'),
+            (3, 'COLETA', 'Coleta na origem'),
+            (4, 'POSITIVACAO', 'Serviço em loja'),
+            (5, 'SERVICO_COMPLEMENTAR', 'Montagem de kit e insumos')
+        ) AS t(sk_tipo_operacao, codigo, descricao)
+    """,
+    "dim_veiculo": """
+        SELECT row_number() OVER (ORDER BY tipo_veiculo) AS sk_veiculo, tipo_veiculo
+        FROM (
+            SELECT DISTINCT tipo_veiculo FROM silver_expedicao_minuta
+            WHERE tipo_veiculo IS NOT NULL
+            UNION
+            SELECT DISTINCT tipo_veiculo FROM silver_fwm_agendamento
+            WHERE tipo_veiculo IS NOT NULL
+        )
+    """,
+    "dim_faixa_peso": """
+        SELECT * FROM (VALUES
+            (1, 'até 30 kg',          0,    30),
+            (2, '30 a 100 kg',       30,   100),
+            (3, '100 a 300 kg',     100,   300),
+            (4, '300 a 1.000 kg',   300,  1000),
+            (5, 'acima de 1.000 kg', 1000, NULL)
+        ) AS t(sk_faixa_peso, faixa, peso_min, peso_max)
+    """,
+    "dim_fornecedor": """
+        SELECT row_number() OVER (ORDER BY fornecedor) AS sk_fornecedor, fornecedor
+        FROM (SELECT DISTINCT fornecedor FROM silver_fwm_agendamento
+              WHERE fornecedor IS NOT NULL)
+    """,
 }
