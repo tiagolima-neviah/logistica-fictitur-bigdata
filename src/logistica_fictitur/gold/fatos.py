@@ -288,8 +288,8 @@ FATOS: dict[str, str] = {
             LEFT JOIN custo_frete cf              ON cf.ss = ff.ss
         ),
         dev_reentrega AS (
-            SELECT {_sk('c.competencia')}            AS sk_competencia,
-                   {_sk('c.dt_lancamento')}          AS sk_data_faturamento,
+            SELECT coalesce({_sk('c.competencia')}, -1)   AS sk_competencia,
+                   coalesce({_sk('c.dt_lancamento')}, -1) AS sk_data_faturamento,
                    c.organizacao_id                 AS sk_cliente,
                    1                                AS sk_tipo_operacao,
                    p.modalidade_id                  AS sk_modalidade,
@@ -344,7 +344,7 @@ FATOS: dict[str, str] = {
                imposto_faturamento + icms + custo_variavel         AS custos_impostos,
                receita - imposto_faturamento - icms - custo_variavel AS mc,
                peso_kg, valor_nf, fl_frete_simbolico, fl_dev_reentrega,
-               extract(year FROM competencia)::int AS ano
+               coalesce(extract(year FROM competencia)::int, -1) AS ano  -- -1 = inválida
         FROM tudo
     """,
     "ft_armazenagem_cobranca": f"""

@@ -30,11 +30,11 @@ Cinco regras invioláveis governam qualquer tratamento neste projeto: o **bronze
 
 ¹ `cod_item_cliente` tem nulos parciais estruturais e permanece; as excluídas são apenas as 100% nulas.
 
-### 2.1 Adendo proposto (achado da régua da gold, 2026-09-02) — aguardando aprovação
+### 2.1 Adendo aprovado em 2026-09-02 (achado da régua da gold)
 
-| código | achado | medida | regra proposta na silver |
+| código | achado | medida | regra aprovada na silver |
 |---|---|---|---|
-| FIN-03 | Lançamentos de custo de devolução/reentrega com competência impossível (herdada de entregas com data-sentinela: 1900, 2055, 2098) | 73 lançamentos | `competencia_conformada = NULL` + `fl_competencia_invalida = true` + original preservado, o mesmo padrão do PED-01; na gold, o membro especial "data inválida" da `dim_data` recebe essas linhas (partição `ano=-1`), para que nada suma e nada contamine os anos reais |
+| FIN-03 | Lançamentos de custo de devolução/reentrega com competência impossível (herdada de entregas com data-sentinela: 1900, 2055, 2098) | 73 lançamentos (0,008% das linhas, 0,004% do valor) | `competencia` e `dt_lancamento` anulados + originais preservados + `fl_competencia_invalida = true`, o mesmo padrão do PED-01; na gold, o membro especial "data inválida" da `dim_data` (`sk_data = -1`) recebe essas linhas na partição `ano=-1`, para que nada suma e nada contamine os anos reais. Impacto financeiro desprezível, impacto estrutural real (partições fantasmas e chaves sem calendário) |
 
 ## 3. Ordem de aplicação (e por quê)
 

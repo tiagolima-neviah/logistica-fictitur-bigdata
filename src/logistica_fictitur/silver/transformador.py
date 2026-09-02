@@ -37,6 +37,7 @@ ESPERADO = {
     "EST-01 lotes com validade absurda anulada": 47,
     "EST-03 itens marcados razão não concilia": 1_983,
     "FIN-01 faturas marcadas frete simbólico": 124_108,
+    "FIN-03 custos com competência impossível anulada": 73,
 }
 
 JANELA_PLAUSIVEL = "BETWEEN DATE '2019-01-01' AND DATE '2027-12-31'"
@@ -160,6 +161,21 @@ def _regras(conn: duckdb.DuckDBPyConnection) -> dict[str, tuple[str, int]]:
                 SELECT count(*) FROM bronze_faturamento_fatura_frete
                 WHERE valor_frete_icms <= 0.05"""),
         ),
+        "financeiro/custo_operacao": (
+            f"""
+            SELECT * EXCLUDE (competencia, dt_lancamento),
+                   CASE WHEN competencia {JANELA_PLAUSIVEL} THEN competencia END AS competencia,
+                   CASE WHEN competencia {JANELA_PLAUSIVEL} THEN dt_lancamento END
+                        AS dt_lancamento,
+                   competencia   AS competencia_original,
+                   dt_lancamento AS dt_lancamento_original,
+                   (NOT competencia {JANELA_PLAUSIVEL}) AS fl_competencia_invalida
+            FROM bronze_financeiro_custo_operacao
+            """,
+            _escalar(conn, f"""
+                SELECT count(*) FROM bronze_financeiro_custo_operacao
+                WHERE NOT competencia {JANELA_PLAUSIVEL}"""),
+        ),
     }
 
 
@@ -180,6 +196,8 @@ def main() -> None:
         "EST-01 lotes com validade absurda anulada": regras["fwm/lote"][1],
         "EST-03 itens marcados razão não concilia": regras["fwm/movimento_estoque"][1],
         "FIN-01 faturas marcadas frete simbólico": regras["faturamento/fatura_frete"][1],
+        "FIN-03 custos com competência impossível anulada":
+            regras["financeiro/custo_operacao"][1],
     }
 
     # grava a silver: transformadas pelas regras + passagem 1:1 das demais

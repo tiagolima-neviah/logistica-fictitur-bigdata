@@ -64,6 +64,17 @@ uv run regua-staging
 
 **7. Explore:** conecte seu cliente SQL (DBeaver, psql) em `localhost:5433`, banco `db_fictitur`, com o usuário e a senha do seu `.env`.
 
+**8. Construa o lake (bronze → silver → gold) e prove cada camada:** cada comando leva segundos; as réguas terminam com erro se algo divergir do contrato documentado.
+
+```bash
+uv run bronze-staging    # staging → parquet (~25 M linhas, ~21 s), verifica contagens
+uv run silver-staging    # aplica as regras do catálogo, presta contas (8/8 esperado)
+uv run gold-staging      # dimensões conformadas + fatos particionadas por ano
+uv run regua-gold        # 25 checks de consistência (esperado: 25 aprovados)
+```
+
+Os arquivos ficam em `data/lake/{bronze,silver,gold}` (ou onde `LAKE_URL` apontar). Para explorar com SQL, os notebooks em `notebooks/` mostram o caminho; o [notebook 04](../notebooks/04_demonstracao_gold.ipynb) percorre o star schema com gráficos.
+
 ## 3. Verificações de saúde
 
 ```bash

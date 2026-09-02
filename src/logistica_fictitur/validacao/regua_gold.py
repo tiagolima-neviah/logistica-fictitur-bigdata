@@ -110,10 +110,14 @@ def executar() -> list[Resultado]:
         _num(conn, "SELECT count(DISTINCT ano) FROM gold_fatos_ft_tracking"),
         (7, 7), "{:.0f}"))
     r.append(_avaliar(
-        "partições: ft_mc_operacao sem competência impossível (fora de 2020..2027)",
+        "partições: ft_mc_operacao só em 2020..2027 ou no membro 'inválida' (-1)",
         _num(conn, "SELECT count(*) FROM gold_fatos_ft_mc_operacao"
-                   " WHERE ano NOT BETWEEN 2020 AND 2027"),
+                   " WHERE ano NOT BETWEEN 2020 AND 2027 AND ano <> -1"),
         (0, 0), "{:.0f}"))
+    r.append(_avaliar(
+        "FIN-03: linhas no membro 'inválida' = custos anulados pela silver",
+        _num(conn, "SELECT count(*) FROM gold_fatos_ft_mc_operacao WHERE ano = -1"),
+        (73, 73), "{:.0f}"))
     return r
 
 

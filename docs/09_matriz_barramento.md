@@ -3,7 +3,7 @@
 # Matriz de Barramento — dos indicadores ao star schema
 
 <!-- nav:start -->
-[Home](../README.md) | [← Camada Silver](08_camada_silver.md)
+[Home](../README.md) | [← Camada Silver](08_camada_silver.md) | [Camada Gold →](10_camada_gold.md)
 <!-- nav:end -->
 
 > O projeto dimensional da gold, feito do jeito Kimball: partimos dos **relatórios que o negócio consome** (os indicadores e os filtros que eles exigem), declaramos o **grão** de cada fato, escolhemos as **dimensões conformadas** e cruzamos tudo na **matriz de barramento**. Dois painéis-alvo abrem a série: **Gestão de Materiais** e **Margens por Operação**. Este documento é o contrato da gold: aprovado, vira fatos e dimensões; nada se constrói fora dele.

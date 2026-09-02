@@ -54,7 +54,8 @@ Bronze ──► Silver ──► Gold (parquet; storage via fsspec: file:// ↔
 | Bronze (staging → parquet via fsspec, ~25M linhas em ~21s) | concluído |
 | Auditoria de qualidade (3 notebooks, 11 achados) + catálogo de regras | concluído |
 | Silver (regras aprovadas + prestação de contas, ~25M linhas em ~3s) | concluído |
-| Gold (datamarts) | a iniciar |
+| Gold (star schema: 13 dimensões + 10 fatos particionadas, régua 25/25) | concluído |
+| Warehouse multidimensional em container + carga por partição | a iniciar |
 | Star schema + carga no destino | a iniciar |
 | Dashboards | a iniciar |
 
@@ -77,6 +78,10 @@ cd staging && docker compose --env-file ../.env up -d && cd ..
 uv sync
 uv run gerador-staging      # popula 2020-2026 (~15 min, determinístico)
 uv run regua-staging        # valida: esperado 28 aprovados, 0 reprovados
+uv run bronze-staging       # lake: staging → parquet com verificação de contagens
+uv run silver-staging       # regras do catálogo + prestação de contas (8/8)
+uv run gold-staging         # star schema: dimensões + fatos particionadas
+uv run regua-gold           # valida a gold: esperado 25 aprovados
 ```
 
 O Postgres sobe na porta `5433` (configurável no `.env`) com o banco `db_fictitur`; o gerador popula ~22 milhões de linhas cobrindo 2020 a 2026 e a régua dá o veredito. O manual completo, com verificações de saúde e solução de problemas, está no [Guia de Reprodução](docs/05_guia_reproducao.md).
@@ -117,6 +122,7 @@ logistica-fictitur-bigdata/
 - [07 · Catálogo de Achados da Silver](docs/07_catalogo_achados_silver.md): os achados da auditoria de qualidade e as regras de tratamento, o contrato da camada.
 - [08 · Camada Silver](docs/08_camada_silver.md): o bronze conformado pelas regras aprovadas, com a prestação de contas que reprova a si mesma em divergência.
 - [09 · Matriz de Barramento](docs/09_matriz_barramento.md): dos indicadores dos painéis ao star schema: grãos, fatos, dimensões conformadas e a matriz Kimball, o contrato da gold.
+- [10 · Camada Gold](docs/10_camada_gold.md): o star schema construído (13 dimensões, 10 fatos particionadas por ano) e a régua que o prova coerente com a silver e com a história.
 
 </details>
 

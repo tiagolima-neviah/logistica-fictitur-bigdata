@@ -21,6 +21,10 @@ DIMENSOES: dict[str, str] = {
                extract(isodow FROM d.dia) IN (6, 7) AS fl_fim_de_semana
         FROM (SELECT unnest(generate_series(DATE '2019-01-01', DATE '2027-12-31',
                                             INTERVAL 1 DAY)) AS dia) d
+        UNION ALL
+        -- membro especial (Kimball): data inválida/desconhecida. Fatos com data
+        -- anulada pela silver apontam para cá em vez de sumir ou contaminar anos reais.
+        SELECT -1, NULL, -1, NULL, 'inválida', NULL, NULL, NULL
     """,
     "dim_cliente": """
         SELECT id AS sk_cliente, sigla, nome_fantasia, porte, segmento,
