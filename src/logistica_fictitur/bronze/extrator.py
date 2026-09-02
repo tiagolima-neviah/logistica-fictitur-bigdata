@@ -24,12 +24,44 @@ from typing import Any
 import fsspec
 import psycopg
 import pyarrow as pa
+import pyarrow.compute as pc
 import pyarrow.parquet as pq
 from adbc_driver_postgresql import dbapi as adbc
 
 from logistica_fictitur.config import dsn_staging, uri_staging, url_lake
 
 SCHEMAS = ("cadastro", "fwm", "expedicao", "faturamento", "financeiro")
+
+
+def _colunas_numeric(conn: psycopg.Connection) -> dict[str, dict[str, pa.DataType]]:
+    """Colunas NUMERIC por tabela, com o tipo Arrow decimal exato do catálogo.
+
+    O driver ADBC entrega NUMERIC como texto (precisão arbitrária); o bronze
+    devolve o tipo verdadeiro convertendo para decimal128(precisão, escala),
+    sem passar por float — dinheiro não perde centavo.
+    """
+    saida: dict[str, dict[str, pa.DataType]] = {}
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT table_schema, table_name, column_name, numeric_precision, numeric_scale"
+            " FROM information_schema.columns"
+            " WHERE table_schema = ANY(%s) AND data_type = 'numeric'",
+            (list(SCHEMAS),),
+        )
+        for schema, tabela, coluna, precisao, escala in cur.fetchall():
+            alvo = pa.decimal128(int(precisao), int(escala or 0))
+            saida.setdefault(f"{schema}.{tabela}", {})[str(coluna)] = alvo
+    return saida
+
+
+def _com_decimais(lote: pa.RecordBatch, alvos: dict[str, pa.DataType]) -> pa.RecordBatch:
+    if not alvos:
+        return lote
+    colunas = [
+        pc.cast(col, alvos[nome]) if nome in alvos else col
+        for nome, col in zip(lote.schema.names, lote.columns, strict=True)
+    ]
+    return pa.RecordBatch.from_arrays(colunas, names=lote.schema.names)
 
 
 def _tabelas(conn: psycopg.Connection) -> list[tuple[str, str]]:
@@ -55,7 +87,7 @@ def _com_metadados(lote: pa.RecordBatch, origem: str, instante: datetime) -> pa.
 
 def _extrair_tabela(
     cur: Any, fs: fsspec.AbstractFileSystem, raiz: str, schema: str, tabela: str,
-    instante: datetime,
+    instante: datetime, decimais: dict[str, pa.DataType],
 ) -> int:
     origem = f"{schema}.{tabela}"
     fs.makedirs(f"{raiz}/bronze/{schema}", exist_ok=True)
@@ -66,7 +98,7 @@ def _extrair_tabela(
     escritor: pq.ParquetWriter | None = None
     try:
         for lote in leitor:
-            lote_final = _com_metadados(lote, origem, instante)
+            lote_final = _com_metadados(_com_decimais(lote, decimais), origem, instante)
             if escritor is None:
                 escritor = pq.ParquetWriter(
                     fs.open(destino, "wb"), lote_final.schema, compression="zstd"
@@ -76,6 +108,9 @@ def _extrair_tabela(
         if escritor is None:  # tabela vazia: grava um parquet só com o esquema
             cur.execute(f'SELECT * FROM {schema}."{tabela}" LIMIT 0')  # noqa: S608
             esquema_base = cur.fetch_arrow_table().schema
+            for nome, alvo in decimais.items():
+                idx = esquema_base.get_field_index(nome)
+                esquema_base = esquema_base.set(idx, pa.field(nome, alvo))
             esquema = esquema_base.append(
                 pa.field("_extraido_em", pa.timestamp("us", tz="UTC"))
             ).append(pa.field("_origem", pa.string()))
@@ -105,12 +140,14 @@ def main() -> None:
 
     with psycopg.connect(dsn_staging()) as conn:
         tabelas = _tabelas(conn)
+        numeric = _colunas_numeric(conn)
     print(f"Bronze: {len(tabelas)} tabelas do staging → {url_lake()}/bronze\n")
 
     extraidas: dict[str, int] = {}
     with adbc.connect(uri_staging()) as conexao, conexao.cursor() as cur:
         for schema, tabela in tabelas:
-            n = _extrair_tabela(cur, fs, raiz, schema, tabela, instante)
+            n = _extrair_tabela(cur, fs, raiz, schema, tabela, instante,
+                                numeric.get(f"{schema}.{tabela}", {}))
             extraidas[f"{schema}.{tabela}"] = n
             print(f"  {schema}.{tabela}".ljust(42) + f"{n:>9} linhas")
 
