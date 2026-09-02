@@ -110,6 +110,7 @@ logistica-fictitur-bigdata/
 - [08 · Camada Silver](docs/08_camada_silver.md): o bronze conformado pelas regras aprovadas, com a prestação de contas que reprova a si mesma em divergência.
 - [09 · Matriz de Barramento](docs/09_matriz_barramento.md): dos indicadores dos painéis ao star schema: grãos, fatos, dimensões conformadas e a matriz Kimball, o contrato da gold.
 - Notebooks da auditoria (executados, com as evidências): [01 cadastro](notebooks/01_qualidade_cadastro.ipynb) · [02 pedidos e entregas](notebooks/02_qualidade_pedidos_entregas.ipynb) · [03 estoque e financeiro](notebooks/03_qualidade_estoque_financeiro.ipynb).
+- [04 · Demonstração da gold](notebooks/04_demonstracao_gold.ipynb): seis perguntas de negócio respondidas pelo star schema, com gráficos (OTIF pelo eixo da promessa, sazonalidade, porte, receita por região, estoque, no-show).
 - Rotinas de manutenção adicionais: publicadas junto com o pipeline.
 
 ---
