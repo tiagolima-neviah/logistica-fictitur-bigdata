@@ -51,7 +51,8 @@ Bronze ──► Silver ──► Gold (parquet; storage via fsspec: file:// ↔
 | Staging Postgres no Docker | concluído |
 | Régua de validação dos dados sintéticos | concluído (28 checks) |
 | Gerador de dados sintéticos (2020-2026, ~22M linhas) | concluído e aprovado 28/28 |
-| Bronze / Silver / Gold | a iniciar |
+| Bronze (staging → parquet via fsspec, ~25M linhas em ~21s) | concluído |
+| Silver / Gold | a iniciar |
 | Star schema + carga no destino | a iniciar |
 | Dashboards | a iniciar |
 
@@ -102,6 +103,7 @@ logistica-fictitur-bigdata/
 - [03 · Modelo de Dados do Staging](docs/03_modelo_dados_staging.md): a referência técnica, com o diagrama e o objetivo de cada uma das 50 tabelas.
 - [04 · Régua de Validação](docs/04_regua_validacao.md): o contrato de aceite dos dados sintéticos e como rodá-lo.
 - [05 · Guia de Reprodução](docs/05_guia_reproducao.md): o manual completo do clone ao staging validado, com healthchecks e troubleshooting.
+- [06 · Camada Bronze](docs/06_camada_bronze.md): o staging congelado em parquet, com linhagem, verificação de contagens e storage plugável.
 - Rotinas de manutenção adicionais: publicadas junto com o pipeline.
 
 ---

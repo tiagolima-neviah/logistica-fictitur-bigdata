@@ -6,7 +6,11 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
 dependencies = [
+    "adbc-driver-manager>=1.12.0",
+    "adbc-driver-postgresql>=1.12.0",
+    "fsspec>=2026.7.0",
     "psycopg[binary]>=3.2",
+    "pyarrow>=25.0.1",
     "python-dotenv>=1.0",
 ]
 
@@ -20,6 +24,7 @@ dev = [
 [project.scripts]
 regua-staging = "logistica_fictitur.validacao.regua:main"
 gerador-staging = "logistica_fictitur.gerador.principal:main"
+bronze-staging = "logistica_fictitur.bronze.extrator:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -40,6 +45,11 @@ python_version = "3.12"
 strict = true
 packages = ["logistica_fictitur"]
 mypy_path = "src"
+
+[[tool.mypy.overrides]]
+# bibliotecas sem stubs publicados (py.typed ausente); o resto do projeto segue strict
+module = ["fsspec.*", "pyarrow.*", "adbc_driver_postgresql.*"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
