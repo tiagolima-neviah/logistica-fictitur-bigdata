@@ -50,13 +50,13 @@ Bronze ──► Silver ──► Gold (parquet; storage via fsspec: file:// ↔
 | Modelo relacional + DDL (staging) | concluído |
 | Staging Postgres no Docker | concluído |
 | Régua de validação dos dados sintéticos | concluído (28 checks) |
-| Gerador de dados sintéticos (2020-2026, ~22M linhas) | concluído e aprovado 28/28 |
+| Gerador de dados sintéticos (2020-2026, 24,9M linhas nas 50 tabelas) | concluído e aprovado 28/28 |
 | Bronze (staging → parquet via fsspec, ~25M linhas em ~21s) | concluído |
 | Auditoria de qualidade (3 notebooks, 11 achados) + catálogo de regras | concluído |
 | Silver (regras aprovadas + prestação de contas, ~25M linhas em ~3s) | concluído |
 | Gold (star schema: 14 dimensões + 10 fatos particionadas, régua 26/26) | concluído |
-| Warehouse multidimensional em container + carga por partição (~11,8M linhas em ~25s) | concluído |
-| Star schema + carga no destino | a iniciar |
+| Warehouse multidimensional em container + carga por partição (~11,8M linhas, ~35s na primeira carga) | concluído |
+| Carga no destino em nuvem (mesmo carregador, `DW_*` apontando para o Neon, recorte `DW_ANOS`) | próximo passo |
 | Dashboards | a iniciar |
 
 ## Requisitos
@@ -85,7 +85,7 @@ uv run regua-gold           # valida a gold: esperado 25 aprovados
 uv run carga-dw             # gold → warehouse Postgres (porta 5434), partição a partição
 ```
 
-O Postgres sobe na porta `5433` (configurável no `.env`) com o banco `db_fictitur`; o gerador popula ~22 milhões de linhas cobrindo 2020 a 2026 e a régua dá o veredito. O manual completo, com verificações de saúde e solução de problemas, está no [Guia de Reprodução](docs/05_guia_reproducao.md).
+O Postgres sobe na porta `5433` (configurável no `.env`) com o banco `db_fictitur`; o gerador popula 24,9 milhões de linhas nas 50 tabelas, cobrindo 2020 a 2026 e a régua dá o veredito. O manual completo, com verificações de saúde e solução de problemas, está no [Guia de Reprodução](docs/05_guia_reproducao.md).
 
 ## Estrutura de diretórios
 
