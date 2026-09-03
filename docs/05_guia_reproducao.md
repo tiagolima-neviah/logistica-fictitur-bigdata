@@ -83,6 +83,12 @@ uv run carga-dw          # gold → Postgres dimensional, partição a partiçã
 
 Conecte seu Power BI ou cliente SQL em `localhost:5434`, banco `dw_fictitur`, schemas `dim` e `fato`. Para subir só alguns anos, use `DW_ANOS=2024,2025,2026` no `.env`.
 
+**10. (Opcional) Leve o warehouse para a nuvem:** um Postgres gratuito on-line, para consultar de qualquer lugar. Passo a passo medido em [Warehouse na Nuvem](12_warehouse_na_nuvem.md):
+
+```bash
+uv run carga-dw --env .env.neon   # ~2,5 min pela rede; recorte de 2026 = 232 MB
+```
+
 ## 3. Verificações de saúde
 
 ```bash

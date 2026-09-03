@@ -3,7 +3,7 @@
 # Warehouse Multidimensional — a gold servida em Postgres
 
 <!-- nav:start -->
-[Home](../README.md) | [← Camada Gold](10_camada_gold.md)
+[Home](../README.md) | [← Camada Gold](10_camada_gold.md) | [Warehouse na Nuvem →](12_warehouse_na_nuvem.md)
 <!-- nav:end -->
 
 > A última etapa do pipeline: o star schema da gold carregado num Postgres dimensional (o **warehouse**, `dw_fictitur`), pronto para Power BI, ferramentas de BI e qualquer cliente SQL. Nasce num segundo container do mesmo `docker compose`, é carregado **partição a partição** com prestação de contas, e o mesmo script serve um destino na nuvem trocando variáveis de ambiente.
@@ -41,7 +41,7 @@ Dica de operação: depois de recarregar partições, rode `VACUUM` no banco (`d
 
 ## 4. Levando para a nuvem (ou para qualquer outro Postgres)
 
-O carregador não sabe onde o Postgres mora: aponte `DW_HOST`, `DW_PORT`, `DW_DB`, `DW_USER` e `DW_PASSWORD` para o destino (um Neon, um RDS, o SQL gerenciado que for) e rode o mesmo `carga-dw`. Para caber num plano gratuito de nuvem, que costuma oferecer menos de 1 GB, a tabela da Seção 3 mostra onde cortar sem perder a história: **carregar só os anos recentes** (`DW_ANOS`) e/ou deixar de fora as fatos de grão fino (`ft_saida`, a maior parte da `ft_tracking`), servindo os painéis com as fatos agregadas. A medição local, antes de subir, é exatamente para essa decisão ser feita com número, não com palpite.
+O carregador não sabe onde o Postgres mora: aponte `DW_HOST`, `DW_PORT`, `DW_DB`, `DW_USER` e `DW_PASSWORD` para o destino (um Neon, um RDS, o SQL gerenciado que for) e rode o mesmo `carga-dw`. Para caber num plano gratuito de nuvem, que costuma oferecer menos de 1 GB, a tabela da Seção 3 mostra onde cortar sem perder a história: **carregar só os anos recentes** (`DW_ANOS`) e/ou deixar de fora as fatos de grão fino (`ft_saida`, a maior parte da `ft_tracking`), servindo os painéis com as fatos agregadas. A medição local, antes de subir, é exatamente para essa decisão ser feita com número, não com palpite. O passo a passo, feito e medido num plano gratuito, está em [Warehouse na Nuvem](12_warehouse_na_nuvem.md).
 
 ## 5. O pipeline completo, em um parágrafo
 

@@ -44,8 +44,16 @@ def uri_staging() -> str:
 
 
 def dsn_warehouse() -> str:
-    """DSN libpq do warehouse multidimensional (variáveis DW_*; Neon = trocar host/senha)."""
+    """DSN libpq do warehouse multidimensional.
+
+    Duas formas, ambas 12-factor: `DW_URL` (string de conexão completa, como a que
+    um Neon/RDS entrega, com `sslmode=...` incluso) tem precedência; sem ela, o DSN
+    é montado das partes DW_HOST/PORT/DB/USER/PASSWORD (o container local).
+    """
     _carregar_env()
+    url = os.environ.get("DW_URL", "").strip()
+    if url:
+        return url
     senha = os.environ.get("DW_PASSWORD")
     if not senha:
         raise RuntimeError("DW_PASSWORD ausente: defina no .env (ver .env.example).")

@@ -11,11 +11,13 @@ Prestação de contas: cada partição confronta contagem no parquet × contagem
 Postgres; divergência derruba a carga. Ao final, mede o tamanho do banco (o
 dado para decidir o que cabe no plano gratuito do destino).
 
-Uso: `uv run carga-dw` (com a gold construída e o serviço `warehouse` no ar).
+Uso: `uv run carga-dw` (com a gold construída e o serviço `warehouse` no ar), ou
+`uv run carga-dw --env .env.neon` para um destino em nuvem descrito noutro arquivo.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 import time
@@ -23,6 +25,7 @@ from datetime import UTC, datetime
 
 import duckdb
 import fsspec
+from dotenv import load_dotenv
 
 from logistica_fictitur.config import anos_carga_dw, dsn_warehouse, url_lake
 from logistica_fictitur.gold.dimensoes import DIMENSOES
@@ -35,6 +38,14 @@ def _n(conn: duckdb.DuckDBPyConnection, sql: str) -> int:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="gold (parquet) → Postgres dimensional")
+    parser.add_argument(
+        "--env", metavar="ARQUIVO",
+        help="arquivo .env alternativo, com precedência sobre o .env (ex.: .env.neon)",
+    )
+    args = parser.parse_args()
+    if args.env and not load_dotenv(args.env, override=True):
+        raise SystemExit(f"arquivo de ambiente não encontrado ou vazio: {args.env}")
     inicio = time.monotonic()
     fs, raiz = fsspec.core.url_to_fs(url_lake())
     raiz = raiz.rstrip("/")
